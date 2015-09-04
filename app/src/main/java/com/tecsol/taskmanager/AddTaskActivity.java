@@ -170,9 +170,9 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     private boolean isTextValid(EditText editText) {
-        boolean isNotValidTime = editText.getText() == null || editText.getText().toString().equals("");
+        boolean isNotValid = editText.getText() == null || editText.getText().toString().equals("");
 
-        return ! isNotValidTime;
+        return ! isNotValid;
     }
 
     private void alertDialogError(final String message) {
