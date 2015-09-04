@@ -56,7 +56,6 @@ public class AddTaskActivity extends AppCompatActivity {
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 alertDialogDatePicker();
             }
         });
@@ -65,15 +64,12 @@ public class AddTaskActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
                 alertDialogTimePicker();
             }
         });
 
-
         btSave.setOnClickListener(new View.OnClickListener() {
             @Override
-
             public void onClick(View v) {
                 saveTask();
             }
@@ -82,14 +78,12 @@ public class AddTaskActivity extends AppCompatActivity {
 
     private void saveTask() {
         if (isDateValid() && isTimeValid()) {
-
             String title = edtTitle.getText().toString();
             String description = edtDescription.getText().toString();
             //String id = edtId.getText().toString();
             String date = edtDate.getText().toString();
             String location = edtLocation.getText().toString();
             String time = edtTime.getText().toString();
-
 
             Task task = new Task();
             task.setTitle(title);
@@ -99,14 +93,15 @@ public class AddTaskActivity extends AppCompatActivity {
             task.setLocation(location);
             task.setId(id++);
 
-
             TaskRepositoryInterface taskRepo = RepositoryFactory.getTaskRepo();
 
             taskRepo.insert(task);
 
             Toast.makeText(AddTaskActivity.this, "Task saved", Toast.LENGTH_LONG).show();
 
-        } else alertDialogError();
+        } else {
+            alertDialogError();
+        }
     }
 
     private void alertDialogDatePicker() {
@@ -121,7 +116,6 @@ public class AddTaskActivity extends AppCompatActivity {
         new AlertDialog.Builder(AddTaskActivity.this).setView(view)
                 .setTitle("Set Date")
                 .setPositiveButton("Go", new DialogInterface.OnClickListener() {
-                    @TargetApi(22)
                     public void onClick(DialogInterface dialog, int id) {
 
                         int month = myDatePicker.getMonth() + 1;
@@ -148,12 +142,11 @@ public class AddTaskActivity extends AppCompatActivity {
                 .findViewById(R.id.myTimePicker);
 
         new AlertDialog.Builder(AddTaskActivity.this).setView(view).setTitle("Set Time").setPositiveButton("Go", new DialogInterface.OnClickListener() {
-            @TargetApi(22)
             public void onClick(DialogInterface dialog, int id) {
 
-                int hourText = myTimePicker.getHour();
+                int hourText = myTimePicker.getCurrentHour();
 
-                int minuteText = myTimePicker.getMinute();
+                int minuteText = myTimePicker.getCurrentMinute();
 
                 edtTime.setText(hourText + ":" + minuteText);
 
@@ -169,25 +162,25 @@ public class AddTaskActivity extends AppCompatActivity {
 
     private boolean isDateValid() {
 
-        boolean isNotValid = edtDate.getText() == null || edtDate.getText().equals("");
+        boolean isNotValidDate = edtDate.getText() == null || edtDate.getText().toString().equals("");
 
-        return !isNotValid;
+        return ! isNotValidDate;
     }
 
     private boolean isTimeValid() {
 
-        boolean isNotValid = edtTime.getText() == null || edtTime.getText().equals("");
+        boolean isNotValidTime = edtTime.getText() == null || edtTime.getText().toString().equals("");
 
-        return !isNotValid;
+        return ! isNotValidTime;
     }
 
     public void alertDialogError() {
-
         new AlertDialog.Builder(AddTaskActivity.this).setTitle("Error").setMessage("Please Enter valid Details").setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
             }
         }).show();
     }
+
 }
 
