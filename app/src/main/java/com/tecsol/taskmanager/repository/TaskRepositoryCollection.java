@@ -23,6 +23,7 @@ public class TaskRepositoryCollection implements TaskRepositoryInterface {
 
     @Override
     public void insert(Task task) {
+        task.setId(tasks.size() + 1);
         tasks.add(task);
     }
 

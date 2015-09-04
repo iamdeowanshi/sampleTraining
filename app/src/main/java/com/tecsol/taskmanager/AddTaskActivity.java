@@ -32,7 +32,6 @@ public class AddTaskActivity extends AppCompatActivity {
     private EditText edtDate;
     private EditText edtTime;
     private Button btSave;
-    private static int id = 1;
     private ImageButton dateButton;
     private ImageButton timeButton;
 
@@ -77,35 +76,38 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     private void saveTask() {
-        if (isDateValid() && isTimeValid()) {
-            String title = edtTitle.getText().toString();
-            String description = edtDescription.getText().toString();
-            //String id = edtId.getText().toString();
-            String date = edtDate.getText().toString();
-            String location = edtLocation.getText().toString();
-            String time = edtTime.getText().toString();
-
-            Task task = new Task();
-            task.setTitle(title);
-            task.setDate(date);
-            task.setDescription(description);
-            task.setTime(time);
-            task.setLocation(location);
-            task.setId(id++);
-
-            TaskRepositoryInterface taskRepo = RepositoryFactory.getTaskRepo();
-
-            taskRepo.insert(task);
-
-            Toast.makeText(AddTaskActivity.this, "Task saved", Toast.LENGTH_LONG).show();
-
-        } else {
-            alertDialogError();
+        if ( ! isTitleValid()) {
+            alertDialogError("Enter valid title");
+            return;
         }
+
+        if ( ! isDateValid()) {
+            alertDialogError("Enter a valid date");
+            return;
+        }
+
+        if ( ! isTimeValid()) {
+            alertDialogError("Enter a valid time");
+            return;
+        }
+
+        String title = edtTitle.getText().toString();
+        String description = edtDescription.getText().toString();
+        //String id = edtId.getText().toString();
+        String date = edtDate.getText().toString();
+        String location = edtLocation.getText().toString();
+        String time = edtTime.getText().toString();
+
+        Task task = new Task(title, description, location, date, time);
+
+        TaskRepositoryInterface taskRepo = RepositoryFactory.getTaskRepo();
+
+        taskRepo.insert(task);
+
+        showToast("Task saved");
     }
 
     private void alertDialogDatePicker() {
-
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.date_picker, null, false);
 
@@ -113,23 +115,21 @@ public class AddTaskActivity extends AppCompatActivity {
 
         myDatePicker.setCalendarViewShown(false);
 
-        new AlertDialog.Builder(AddTaskActivity.this).setView(view)
+        new AlertDialog.Builder(AddTaskActivity.this)
+                .setView(view)
                 .setTitle("Set Date")
                 .setPositiveButton("Go", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
                         int month = myDatePicker.getMonth() + 1;
                         int day = myDatePicker.getDayOfMonth();
                         int year = myDatePicker.getYear();
 
                         edtDate.setText(day + "-" + month + "-" + year);
 
-                        Toast.makeText(AddTaskActivity.this, "Date Selected", Toast.LENGTH_LONG).show();
+                        showToast("Date Selected");
 
                         dialog.cancel();
-
                     }
-
                 }).show();
     }
 
@@ -145,41 +145,48 @@ public class AddTaskActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int id) {
 
                 int hourText = myTimePicker.getCurrentHour();
-
                 int minuteText = myTimePicker.getCurrentMinute();
 
                 edtTime.setText(hourText + ":" + minuteText);
 
-
-                Toast.makeText(AddTaskActivity.this, "Time Selected", Toast.LENGTH_LONG).show();
+                showToast("Time Selected");
 
                 dialog.cancel();
-
             }
 
         }).show();
     }
 
     private boolean isDateValid() {
-
-        boolean isNotValidDate = edtDate.getText() == null || edtDate.getText().toString().equals("");
-
-        return ! isNotValidDate;
+        return isTextValid(edtDate);
     }
 
     private boolean isTimeValid() {
+        return isTextValid(edtTime);
+    }
 
-        boolean isNotValidTime = edtTime.getText() == null || edtTime.getText().toString().equals("");
+    private boolean isTitleValid() {
+        return isTextValid(edtTitle);
+    }
+
+    private boolean isTextValid(EditText editText) {
+        boolean isNotValidTime = editText.getText() == null || editText.getText().toString().equals("");
 
         return ! isNotValidTime;
     }
 
-    public void alertDialogError() {
-        new AlertDialog.Builder(AddTaskActivity.this).setTitle("Error").setMessage("Please Enter valid Details").setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        }).show();
+    private void alertDialogError(final String message) {
+        new AlertDialog.Builder(AddTaskActivity.this)
+                .setTitle("Error").setMessage(message)
+                .setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }).show();
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
 }

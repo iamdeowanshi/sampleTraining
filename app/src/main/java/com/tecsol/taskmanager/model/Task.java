@@ -11,6 +11,17 @@ public class Task {
     private String Date;
     private String Time;
 
+    public Task() {
+    }
+
+    public Task(String title, String description, String location, String date, String time) {
+        this.title = title;
+        this.description = description;
+        this.location = location;
+        Date = date;
+        Time = time;
+    }
+
     @Override
     public String toString() {
         return id + "-" + title;
