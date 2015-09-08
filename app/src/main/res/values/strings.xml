@@ -8,4 +8,5 @@
     <string name="selectdate" />
     <string name="selecttime" />
     <string name="select_date" />
+    <string name="title_activity_find_task">FindTaskActivity</string>
 </resources>

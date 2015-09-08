@@ -8,7 +8,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btn_add, btn_list;
+    private Button btn_add, btn_list, btn_find;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
         btn_add=(Button)findViewById(R.id.button_add);
         btn_list=(Button)findViewById(R.id.button_list);
+        btn_find = (Button)findViewById(R.id.button_find);
 
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,6 +33,14 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent fp=new Intent(getApplicationContext(),ListTaskActivity.class);
                 startActivity(fp);
+            }
+        });
+
+        btn_find.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //Intent fp = new Intent(getApplicationContext(), .class);
             }
         });
     }

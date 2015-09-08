@@ -24,6 +24,14 @@
             android:name=".ListTaskActivity"
             android:label="@string/title_activity_list_task" >
         </activity>
+        <activity
+            android:name=".DetailTask"
+            android:label="DetailTask" >
+        </activity>
+        <activity
+            android:name=".FindTaskActivity"
+            android:label="@string/title_activity_find_task" >
+        </activity>
     </application>
 
 </manifest>
